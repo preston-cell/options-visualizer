@@ -41,3 +41,74 @@ def black_scholes_price(S,K,T,r,sigma,option_type="call"):
         price = K * math.exp(-r * T) *  norm.cdf(-d2) - S * norm.cdf(-d1)
 
     return round(price, 4)
+
+
+def calculate_greeks(S, K, T, r, sigma, option_type="call"):
+    d1, d2 = calculate_d1_d2(S, K, T, r, sigma)
+
+    gamma = norm.pdf(d1) / (S * sigma * math.sqrt(T))
+    vega = S * norm.pdf(d1) * math.sqrt(T) / 100
+
+    if option_type == "call":
+        delta = norm.cdf(d1)
+        theta = (-(S * norm.pdf(d1) * sigma) / (2 * math.sqrt(T))
+                 - r * K * math.exp(-r * T) * norm.cdf(d2)) / 365
+        rho = K * T * math.exp(-r * T) * norm.cdf(d2) / 100
+
+    elif option_type == "put":
+        delta = norm.cdf(d1) - 1
+        theta = (-(S * norm.pdf(d1) * sigma) / (2 * math.sqrt(T))
+                 + r * K * math.exp(-r * T) * norm.cdf(-d2)) / 365
+        rho = -K * T * math.exp(-r * T) * norm.cdf(-d2) / 100
+
+    # delta is a number 0-1 indicating how much the price of
+    # the option will change given a 1$ increase in the stock price
+
+    # gamma is the rate of change of delta
+
+    # vega is an indication of how much the option
+    # gains or loses given an increase in 1% of volatility
+
+    #rho is how much the discounted cost changes
+    # given an increase of interest rates by 1%
+    return {
+        "delta": round(delta, 4),
+        "gamma": round(gamma, 4),
+        "theta": round(theta, 4),
+        "vega":  round(vega, 4),
+        "rho":   round(rho, 4),
+    }
+
+def calculate_payoff_curve(S, K, premium, option_type="call", num_points=200):
+    low  = S * 0.5
+    high = S * 1.5
+    step = (high - low) / num_points
+
+    curve = []
+    price = low
+    while price <= high:
+        if option_type == "call":
+            pnl = max(price - K, 0) - premium
+        else:
+            pnl = max(K - price, 0) - premium
+
+        curve.append({"stock_price": round(price, 2), "pnl": round(pnl, 4)})
+        price += step
+
+    return curve
+
+
+if __name__ == "__main__":
+    S     = 100
+    K     = 105
+    T     = 30 / 365
+    r     = 0.05
+    sigma = 0.20
+
+    price  = black_scholes_price(S, K, T, r, sigma, "call")
+    greeks = calculate_greeks(S, K, T, r, sigma, "call")
+    payoff = calculate_payoff_curve(S, K, price)
+
+    print(f"Price  : ${price}")
+    print(f"Greeks : {greeks}")
+    print(f"Payoff points: {len(payoff)}, first: {payoff[0]}, last: {payoff[-1]}")
