@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f8f9fa;
+  color: #212529;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.slider-row {
+  margin-bottom: 1rem;
+}
+
+.slider-row label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+  color: #495057;
+}
+
+.slider-row input[type="range"] {
+  width: 100%;
+}
+
+.slider-row select {
+  width: 100%;
+  padding: 4px;
+  font-size: 0.875rem;
+}
+
+.greeks-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.greek-item {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.greek-item .greek-label {
+  font-size: 0.75rem;
+  color: #868e96;
+  margin-bottom: 2px;
+}
+
+.greek-item .greek-value {
+  font-size: 1rem;
+  font-weight: 500;
+}

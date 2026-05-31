@@ -30,11 +30,17 @@ function App() {
   }, [inputs])
 
   return (
-    <div>
+    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
       <h1>Options Visualizer</h1>
-      <PricingInputs inputs={inputs} onInputChange={handleInputChange} />
-      <GreeksDisplay results={results} />
-      <PayoffChart payoff={results?.payoff} />
+      <div style={{ display: 'flex', gap: '2rem' }}>
+        <div style={{ flex: '0 0 280px' }}>
+          <PricingInputs inputs={inputs} onInputChange={handleInputChange} />
+          <GreeksDisplay results={results} />
+        </div>
+        <div style={{ flex: 1 }}>
+          <PayoffChart payoff={results?.payoff} />
+        </div>
+      </div>
     </div>
   )
 }

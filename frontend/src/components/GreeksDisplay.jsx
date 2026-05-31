@@ -2,14 +2,18 @@ function GreeksDisplay({ results }) {
   if (!results) return null
 
   return (
-    <div>
-      <h2>Option Price: ${results.price}</h2>
-      <h3>Greeks</h3>
-      <p>Delta: {results.greeks.delta}</p>
-      <p>Gamma: {results.greeks.gamma}</p>
-      <p>Theta: {results.greeks.theta}</p>
-      <p>Vega: {results.greeks.vega}</p>
-      <p>Rho: {results.greeks.rho}</p>
+    <div className="card">
+      <h3>Option Price</h3>
+      <h2>${results.price}</h2>
+      <h3 style={{ marginTop: '1rem' }}>Greeks</h3>
+      <div className="greeks-grid">
+        {Object.entries(results.greeks).map(([key, value]) => (
+          <div className="greek-item" key={key}>
+            <div className="greek-label">{key.charAt(0).toUpperCase() + key.slice(1)}</div>
+            <div className="greek-value">{value}</div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
