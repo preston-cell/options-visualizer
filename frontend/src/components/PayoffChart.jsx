@@ -18,9 +18,17 @@ function PayoffChart({ payoff }) {
       .domain(d3.extent(payoff, d => d.stock_price))
       .range([margin.left, width - margin.right])
 
+    const allValues = [
+        ...payoff.map(d => d.pnl),
+        ...payoff.map(d => d.current_value)
+    ]
+    const yMin = d3.min(allValues)
+    const yMax = d3.max(allValues)
+    const padding = (yMax - yMin) * 0.1
+
     const y = d3.scaleLinear()
-      .domain(d3.extent(payoff, d => d.pnl))
-      .range([height - margin.bottom, margin.top])
+    .domain([yMin - padding, yMax + padding])
+    .range([height - margin.bottom, margin.top])
 
     svg.append('g')
       .attr('transform', `translate(0, ${height - margin.bottom})`)
@@ -43,11 +51,22 @@ function PayoffChart({ payoff }) {
       .y(d => y(d.pnl))
 
     svg.append('path')
-      .datum(payoff)
-      .attr('fill', 'none')
-      .attr('stroke', 'steelblue')
-      .attr('stroke-width', 2)
-      .attr('d', line)
+        .datum(payoff)
+        .attr('fill', 'none')
+        .attr('stroke', '#e63946')
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '6,3')
+        .attr('d', d3.line()
+            .x(d => x(d.stock_price))
+            .y(d => y(d.current_value))
+        )
+
+    svg.append('path')
+        .datum(payoff)
+        .attr('fill', 'none')
+        .attr('stroke', 'steelblue')
+        .attr('stroke-width', 2)
+        .attr('d', line)
 
   }, [payoff])
 

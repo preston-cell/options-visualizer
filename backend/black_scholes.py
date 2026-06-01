@@ -79,7 +79,7 @@ def calculate_greeks(S, K, T, r, sigma, option_type="call"):
         "rho":   round(rho, 4),
     }
 
-def calculate_payoff_curve(S, K, premium, option_type="call", num_points=200):
+def calculate_payoff_curve(S, K, T, r, sigma, premium, option_type="call", num_points=200):
     low  = S * 0.5
     high = S * 1.5
     step = (high - low) / num_points
@@ -88,11 +88,17 @@ def calculate_payoff_curve(S, K, premium, option_type="call", num_points=200):
     price = low
     while price <= high:
         if option_type == "call":
-            pnl = max(price - K, 0) - premium
+            expiration_pnl = max(price - K, 0) - premium
         else:
-            pnl = max(K - price, 0) - premium
+            expiration_pnl = max(K - price, 0) - premium
 
-        curve.append({"stock_price": round(price, 2), "pnl": round(pnl, 4)})
+        current_value = black_scholes_price(price, K, T, r, sigma, option_type)
+
+        curve.append({
+            "stock_price": round(price, 2),
+            "pnl": round(expiration_pnl, 4),
+            "current_value": round(current_value, 4)
+        })
         price += step
 
     return curve

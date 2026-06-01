@@ -31,7 +31,7 @@ def price_option(req: OptionRequest):
 
     greeks = calculate_greeks(req.stock_price, req.strike_price, T, req.risk_free_rate, req.volatility, req.option_type)
 
-    payoff = calculate_payoff_curve(req.stock_price, req.strike_price, price, req.option_type)
+    payoff = calculate_payoff_curve(req.stock_price, req.strike_price, T, req.risk_free_rate, req.volatility, price, req.option_type)
 
     return {
         "price": price,
